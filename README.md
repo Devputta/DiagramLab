@@ -1,263 +1,374 @@
 # DiagramLab
 
-> A professional, browser-based diagram editor for software architecture, flowcharts, UML, database schemas, and technical documentation.
+> **A browser-based workspace for creating, editing, and documenting technical diagrams.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Built with React](https://img.shields.io/badge/React-19-61DAFB.svg)](https://react.dev/)
-[![Powered by Vite](https://img.shields.io/badge/Vite-8-646CFF.svg)](https://vite.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react\&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite\&logoColor=white)](https://vite.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js\&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5-000000?logo=express\&logoColor=white)](https://expressjs.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+---
 
 ## Overview
 
-DiagramLab is a lightweight technical diagram workspace designed for developers, students, engineers, and technical teams who need editable diagrams without a heavyweight desktop tool.
+**DiagramLab** is a technical diagram workspace built for creating clear, editable, and structured visual documentation directly in the browser.
 
-It combines an interactive canvas with reusable templates, local project storage, diagram export, dark mode, and an optional server-side Gemini integration for turning natural-language system descriptions into structured editable diagrams.
+The application brings diagram editing, reusable templates, project organization, export workflows, local persistence, and AI-assisted diagram generation into a single workspace.
 
-### Core capabilities
+It is designed for software architecture, system design, engineering documentation, process visualization, database modeling, UML-style diagrams, and technical communication.
 
-- Technical architecture diagrams
-- Flowcharts and process diagrams
-- UML-style diagrams
-- Database and system diagrams
-- Editable nodes and connectors
-- Templates for common technical workflows
-- Project dashboard and browser-side persistence
-- Import/export workflows
-- Publication-ready diagram export
-- Dark and light themes
-- AI-assisted diagram synthesis through a server-side Gemini API
-- Local fallback diagram synthesis when AI generation is unavailable
-- Express API with security headers, request validation, body-size limits, and rate limiting
+---
 
-## Architecture
+## Product Flow
 
-```text
-Browser
-   |
-   | HTTPS
-   v
-Render Web Service
-   |
-   +----------------------+
-   |                      |
-   v                      v
-Express Server          Vite-built SPA
-   |
-   +---- /api/health
-   |
-   +---- /api/ai/generate-diagram
-             |
-             v
-        Google Gemini API
+```mermaid
+flowchart LR
+    A[User] --> B[DiagramLab Workspace]
+
+    B --> C[Create Diagram]
+    B --> D[Use Template]
+    B --> E[Open Project]
+    B --> F[AI Assistant]
+
+    C --> G[Interactive Canvas]
+    D --> G
+    E --> G
+
+    F --> H[Diagram Generation API]
+    H --> I[Gemini]
+    I --> H
+    H --> G
+
+    G --> J[Edit & Organize]
+    J --> K[Export / Save]
 ```
 
-The Gemini API key is kept on the server and is never required in the browser bundle.
+---
 
-## Tech Stack
+## Core Capabilities
 
-| Layer | Technology |
-|---|---|
-| UI | React 19 |
-| Language | TypeScript |
-| Build | Vite |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
-| Motion | Motion |
-| Server | Node.js + Express |
-| AI | Google Gemini via `@google/genai` |
-| Persistence | Browser local storage |
-| Deployment | Render |
+### Diagram Workspace
 
-## Local Development
+* Interactive diagram canvas
+* Editable nodes and connectors
+* Node positioning and manipulation
+* Structured diagram relationships
+* Multiple diagram styles
+* Technical documentation-oriented layout
 
-### Requirements
+### Diagram Types
 
-- Node.js 22 or newer
-- npm
-- Optional: a Google Gemini API key for AI diagram generation
+* Software architecture
+* System architecture
+* Flowcharts
+* Process diagrams
+* UML-style diagrams
+* Database schemas
+* Service and infrastructure diagrams
+* Technical workflows
 
-### Install
+### Templates
 
-```bash
-npm install
+Reusable starting points for common technical scenarios.
+
+Templates provide predefined diagram structures that can be edited and extended within the workspace.
+
+### Project Workspace
+
+DiagramLab provides browser-based project organization for working with multiple diagrams.
+
+Projects can be created, opened, edited, duplicated, and managed from the application workspace.
+
+### Export
+
+Diagrams can be transformed into presentation and documentation-ready outputs through the application's export workflows.
+
+### Themes
+
+The interface supports:
+
+* Light mode
+* Dark mode
+
+The visual system is designed for both focused editing and technical presentation.
+
+---
+
+# AI-Assisted Diagram Generation
+
+DiagramLab includes an optional AI workflow for converting natural-language system descriptions into structured diagrams.
+
+Instead of manually creating every component, users can describe a system in natural language and receive a structured diagram that can then be edited inside the canvas.
+
+## AI Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant UI as DiagramLab UI
+    participant API as Express API
+    participant AI as Gemini
+    participant C as Canvas
+
+    U->>UI: Describe system
+    UI->>API: Submit diagram request
+    API->>AI: Generate structured diagram
+    AI-->>API: Nodes and relationships
+    API-->>UI: Validated diagram
+    UI->>C: Render editable diagram
+    U->>C: Modify diagram
 ```
 
-### Environment
+The AI workflow is designed around **structured diagram data rather than generated images**, allowing generated results to remain editable.
 
-Create a `.env` file:
+---
 
-```env
-GEMINI_API_KEY=your_gemini_api_key
+# Application Architecture
+
+```mermaid
+flowchart TB
+    subgraph Client["Browser"]
+        UI["React Application"]
+        Canvas["Diagram Canvas"]
+        Projects["Project Workspace"]
+        Templates["Template System"]
+        Storage["Browser Storage"]
+    end
+
+    subgraph Server["Application Server"]
+        Express["Express Server"]
+        Health["Health API"]
+        AIEndpoint["AI Diagram API"]
+        Validation["Request & Output Validation"]
+        Security["Security Controls"]
+    end
+
+    subgraph External["External Service"]
+        Gemini["Google Gemini API"]
+    end
+
+    UI --> Canvas
+    UI --> Projects
+    UI --> Templates
+    Projects --> Storage
+
+    UI --> Express
+
+    Express --> Health
+    Express --> AIEndpoint
+    AIEndpoint --> Validation
+    Validation --> Security
+    Security --> Gemini
+
+    Gemini --> Security
+    Security --> Validation
+    Validation --> AIEndpoint
+    AIEndpoint --> UI
 ```
 
-Do not commit `.env`.
+---
 
-### Start development
+# Diagram Generation Flow
 
-```bash
-npm run dev
+```mermaid
+flowchart LR
+    A["Natural Language Input"]
+    B["Request Validation"]
+    C["AI Processing"]
+    D["Structured Diagram"]
+    E["Schema Validation"]
+    F["Canvas Rendering"]
+    G["Editable Diagram"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
 ```
 
-The development server starts on the port configured by the application, defaulting to `3000`.
+The generated result is processed as structured diagram data before being rendered by the editor.
 
-### Production build
+This allows users to continue modifying the generated architecture instead of receiving a static image.
 
-```bash
-npm run build
-npm run start
+---
+
+# Editing Flow
+
+```mermaid
+flowchart TD
+    A["Open Workspace"] --> B["Select or Create Diagram"]
+
+    B --> C["Add Nodes"]
+    B --> D["Edit Nodes"]
+    B --> E["Create Connections"]
+
+    C --> F["Canvas State"]
+    D --> F
+    E --> F
+
+    F --> G["Organize Diagram"]
+    G --> H["Save Project State"]
+    H --> I["Export Diagram"]
 ```
 
-Health check:
+---
 
-```text
-/api/health
+# Project Data Flow
+
+```mermaid
+flowchart LR
+    A["User Action"] --> B["React State"]
+    B --> C["Diagram Model"]
+    C --> D["Project State"]
+    D --> E["Browser Storage"]
+
+    E --> D
+    D --> C
+    C --> B
 ```
 
-## Deploy to Render
+Project data is primarily maintained in the browser, allowing the workspace to preserve diagram state without requiring a dedicated application database.
 
-DiagramLab is designed to run as a **Render Web Service**, not a static site, because the Express server handles the Gemini API request without exposing the API key to the browser.
+---
 
-### 1. Push the project to GitHub
+# Security Architecture
 
-Create a repository such as:
+DiagramLab separates browser functionality from server-side AI communication.
 
-```text
-DiagramLab
+```mermaid
+flowchart TB
+    Browser["Browser Application"]
+    API["Express API"]
+    Validation["Input Validation"]
+    Limits["Request Limits"]
+    Rate["Rate Limiting"]
+    Gemini["Gemini API"]
+    Response["Validated Response"]
+
+    Browser --> API
+    API --> Validation
+    Validation --> Limits
+    Limits --> Rate
+    Rate --> Gemini
+    Gemini --> Response
+    Response --> Browser
 ```
 
-Then push the project:
+The AI provider credential remains on the server side rather than being embedded into the browser application.
 
-```bash
-git init
-git add .
-git commit -m "Initial DiagramLab release"
-git branch -M main
-git remote add origin https://github.com/Devputta/DiagramLab.git
-git push -u origin main
+Security controls include:
+
+* Server-side API credential handling
+* Request validation
+* Request body-size limits
+* Prompt length restrictions
+* Input sanitization
+* AI endpoint rate limiting
+* Generated diagram validation
+* Diagram relationship validation
+* Output field limits
+* Security response headers
+* Reduced server information exposure
+
+---
+
+# Fallback Generation
+
+DiagramLab also supports a local fallback workflow when external AI generation is unavailable.
+
+```mermaid
+flowchart TD
+    A["Diagram Request"] --> B{"AI Service Available?"}
+
+    B -->|Yes| C["Gemini Generation"]
+    B -->|No| D["Local Diagram Synthesis"]
+
+    C --> E["Structured Diagram"]
+    D --> E
+
+    E --> F["Validation"]
+    F --> G["Editable Canvas"]
 ```
 
-### 2. Create the Render service
+This keeps the diagram creation workflow usable even when the external AI service cannot complete a request.
 
-In Render:
+---
 
-1. Open **New +**
-2. Select **Web Service**
-3. Connect your GitHub repository
-4. Select the `main` branch
-5. Use these settings:
+# Technology Stack
 
-| Setting | Value |
-|---|---|
-| Runtime | Node |
-| Build Command | `npm install && npm run build` |
-| Start Command | `npm run start` |
-| Node Version | `22` or newer |
-| Health Check Path | `/api/health` |
+| Layer              | Technology            |
+| ------------------ | --------------------- |
+| Frontend           | React 19              |
+| Language           | TypeScript            |
+| Build Tool         | Vite                  |
+| Styling            | Tailwind CSS          |
+| Icons              | Lucide React          |
+| Animation          | Motion                |
+| Backend            | Node.js               |
+| API Layer          | Express               |
+| AI Integration     | Google Gemini         |
+| Client Persistence | Browser Local Storage |
+| Deployment Model   | Web Service           |
 
-### 3. Add the Gemini secret
+---
 
-In Render, open:
+# Frontend Architecture
 
-**Environment → Environment Variables**
+```mermaid
+flowchart TB
+    App["Application"]
 
-Add:
+    App --> Workspace["Workspace"]
+    App --> Dashboard["Project Dashboard"]
+    App --> Templates["Templates"]
+    App --> Assistant["AI Assistant"]
 
-```text
-GEMINI_API_KEY
+    Workspace --> Canvas["Diagram Canvas"]
+    Workspace --> Toolbar["Editor Controls"]
+    Workspace --> Inspector["Properties / Controls"]
+
+    Dashboard --> Projects["Projects"]
+    Templates --> TemplateData["Template Definitions"]
+
+    Canvas --> Nodes["Diagram Nodes"]
+    Canvas --> Edges["Diagram Connections"]
+
+    Assistant --> API["AI API"]
 ```
 
-Value:
+---
 
-```text
-your_real_gemini_api_key
+# Backend Architecture
+
+```mermaid
+flowchart TB
+    Client["React Client"]
+
+    Client --> Express["Express Application"]
+
+    Express --> Health["Health Endpoint"]
+    Express --> AI["AI Generation Endpoint"]
+
+    AI --> Validation["Input Validation"]
+    Validation --> RateLimit["Rate Limiting"]
+    RateLimit --> Gemini["Gemini Provider"]
+
+    Gemini --> Output["Structured AI Output"]
+    Output --> Schema["Output Validation"]
+    Schema --> Client
 ```
 
-Do not put the real key in GitHub, `README.md`, `.env.example`, screenshots, or frontend source code.
+---
 
-### 4. Deploy
-
-Click **Create Web Service**.
-
-Render will:
-
-1. Clone the repository
-2. Install dependencies
-3. Build the Vite application
-4. Start the Express server
-5. Expose the service on an HTTPS URL
-
-### 5. Verify the deployment
-
-Open:
-
-```text
-https://YOUR-RENDER-DOMAIN.onrender.com/api/health
-```
-
-Expected response:
-
-```json
-{
-  "status": "ok",
-  "service": "DiagramLab",
-  "timestamp": "..."
-}
-```
-
-Then open the main Render URL and test:
-
-- Landing page
-- Canvas
-- Templates
-- Project creation
-- Dark/light mode
-- Export
-- AI Assistant
-- AI fallback behavior
-
-## Environment Variables
-
-| Variable | Required | Purpose |
-|---|---:|---|
-| `GEMINI_API_KEY` | For AI | Server-side Google Gemini authentication |
-| `PORT` | No | Render supplies the production port |
-| `NODE_ENV` | No | Set to `production` by the deployment environment |
-
-Never expose `GEMINI_API_KEY` through `VITE_*` variables.
-
-## Security
-
-DiagramLab applies several defensive controls:
-
-- Server-side API key handling
-- `X-Content-Type-Options`
-- `X-Frame-Options`
-- `Referrer-Policy`
-- `Permissions-Policy`
-- Disabled `X-Powered-By`
-- JSON request-size limit
-- AI prompt length validation
-- Null-byte sanitization
-- AI endpoint rate limiting
-- Generated diagram structure validation
-- Edge reference validation
-- Output field length limits
-- Render reverse-proxy awareness
-
-See [SECURITY.md](SECURITY.md) for the security policy and responsible disclosure process.
-
-## Data and Privacy
-
-Diagram projects are primarily stored in the user's browser through local storage.
-
-When AI diagram generation is requested, the entered prompt is sent from the browser to the DiagramLab server and then to the configured Gemini API provider for processing.
-
-Do not enter confidential, proprietary, regulated, or personal information into AI prompts unless you are authorized to process that information through the configured service.
-
-## Project Structure
+# Project Structure
 
 ```text
 DiagramLab/
+│
 ├── src/
 │   ├── components/
 │   ├── lib/
@@ -266,107 +377,175 @@ DiagramLab/
 │   ├── types/
 │   ├── App.tsx
 │   └── main.tsx
+│
 ├── server.ts
 ├── index.html
-├── vite.config.ts
+├── metadata.json
 ├── package.json
+├── tsconfig.json
+├── vite.config.ts
+│
 ├── .env.example
+├── .gitignore
+├── render.yaml
 ├── SECURITY.md
 ├── LICENSE
 └── README.md
 ```
 
-## API
+---
 
-### Health
-
-```http
-GET /api/health
-```
-
-Returns the service health status.
-
-### Generate Diagram
-
-```http
-POST /api/ai/generate-diagram
-Content-Type: application/json
-```
-
-Example:
-
-```json
-{
-  "prompt": "Browser connects to an API gateway, which routes requests to an application service and PostgreSQL database.",
-  "diagramType": "architecture"
-}
-```
-
-The endpoint returns structured nodes and edges suitable for the DiagramLab editor.
-
-## Production Notes
-
-- Use HTTPS in production.
-- Keep secrets in Render Environment Variables.
-- Do not commit `.env`.
-- Rotate a Gemini key immediately if it is exposed.
-- Keep dependencies updated.
-- Review Render logs after deployment.
-- Monitor AI usage and provider quotas.
-- For high-traffic production deployments, replace the in-memory rate limiter with a distributed solution such as Redis-backed rate limiting.
-- Consider adding authentication and persistent server-side project storage before using the application as a multi-user SaaS.
-
-## Troubleshooting
-
-### Build fails
-
-Run locally:
-
-```bash
-npm install
-npm run build
-```
-
-Fix the first error reported by the build before redeploying.
-
-### AI Assistant says Gemini is unavailable
-
-Check the Render environment variables and confirm:
+# Application Layers
 
 ```text
-GEMINI_API_KEY
+┌─────────────────────────────────────────────┐
+│                  DiagramLab                 │
+├─────────────────────────────────────────────┤
+│              Presentation Layer             │
+│        React • UI • Themes • Controls       │
+├─────────────────────────────────────────────┤
+│               Workspace Layer               │
+│      Canvas • Nodes • Edges • Projects      │
+├─────────────────────────────────────────────┤
+│                Data Layer                   │
+│        Diagram Model • Local Storage        │
+├─────────────────────────────────────────────┤
+│                 API Layer                   │
+│       Express • Validation • Rate Limit     │
+├─────────────────────────────────────────────┤
+│               AI Integration                │
+│                 Gemini API                  │
+└─────────────────────────────────────────────┘
 ```
 
-is present and valid. Redeploy after changing environment variables if Render does not automatically restart the service.
+---
 
-### Application loads but API requests fail
+# Design Principles
 
-Open:
+DiagramLab is built around several core principles:
 
-```text
-/api/health
+### Editable First
+
+Generated and manually created diagrams remain structured and editable rather than being treated as static images.
+
+### Structured Data
+
+Diagram elements are represented as structured nodes and relationships, enabling manipulation, validation, and export.
+
+### Browser-Centered
+
+The primary editing experience runs directly in the browser.
+
+### Secure AI Integration
+
+External AI credentials are handled server-side rather than exposed through the client application.
+
+### Practical Technical Documentation
+
+The interface is designed around real-world engineering diagrams rather than purely visual drawing.
+
+### Minimal Infrastructure
+
+Browser persistence reduces the infrastructure required for basic project usage.
+
+---
+
+# Use Cases
+
+DiagramLab can be used for:
+
+* Software architecture planning
+* System design documentation
+* Database modeling
+* API architecture visualization
+* Infrastructure diagrams
+* Application workflows
+* Process documentation
+* UML-style modeling
+* Engineering presentations
+* Technical project documentation
+* AI-assisted architecture exploration
+
+---
+
+# Key Workflow
+
+```mermaid
+flowchart LR
+    A["Describe"] --> B["Generate"]
+    B --> C["Edit"]
+    C --> D["Organize"]
+    D --> E["Validate"]
+    E --> F["Export"]
 ```
 
-If health works but AI generation fails, inspect the Render service logs and verify the Gemini API key and provider quota.
+**Describe → Generate → Edit → Organize → Validate → Export**
 
-### Render reports a port problem
+---
 
-Do not hard-code a production port. The server already reads the Render-provided `PORT` variable.
+# Security Model
 
-## License
+DiagramLab treats the browser and external AI provider as separate trust boundaries.
 
-Released under the MIT License. See [LICENSE](LICENSE).
+```mermaid
+flowchart TB
+    U["User"]
 
-## Author
+    subgraph Browser["Client Trust Boundary"]
+        UI["DiagramLab UI"]
+        State["Diagram State"]
+    end
 
-**DevPutta**
+    subgraph Server["Server Trust Boundary"]
+        API["Express API"]
+        Guard["Validation & Controls"]
+        Secret["Server-side API Credential"]
+    end
 
-GitHub: https://github.com/Devputta
+    subgraph Provider["External Boundary"]
+        AI["Gemini API"]
+    end
+
+    U --> UI
+    UI --> State
+    UI --> API
+    API --> Guard
+    Guard --> Secret
+    Guard --> AI
+    AI --> Guard
+    Guard --> API
+    API --> UI
+```
+
+This separation prevents the AI provider credential from becoming part of the client-side application bundle.
+
+---
+
+# Summary
+
+DiagramLab brings together:
+
+* Interactive technical diagram editing
+* Architecture and workflow visualization
+* Reusable diagram templates
+* Browser-based project management
+* Local project persistence
+* Export workflows
+* Dark and light themes
+* AI-assisted structured diagram generation
+* Local fallback generation
+* Server-side AI integration
+* Request and output validation
+* Application-level security controls
+
+The result is a focused technical workspace for creating **editable, structured, and documentation-ready diagrams directly in the browser**.
 
 ---
 
 <div align="center">
 
-**DiagramLab — precise diagrams for technical work.**
+**DiagramLab**
+
+*Create. Structure. Visualize.*
 
 </div>
